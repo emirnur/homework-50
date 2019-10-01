@@ -21,6 +21,7 @@ class ArticleView(TemplateView):
         pk = kwargs.get('pk')
         context = super().get_context_data(**kwargs)
         context['article'] = get_object_or_404(Article, pk=pk)
+        context['comments'] = Comment.objects.all().filter(article=context['article']).order_by('-created_at')
         return context
 
 
@@ -139,3 +140,5 @@ class CommentDeleteView(View):
         comment = get_object_or_404(Comment, pk=kwargs.get('pk'))
         comment.delete()
         return redirect('comments_view')
+
+
